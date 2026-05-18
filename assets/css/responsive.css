@@ -67,22 +67,24 @@
     flex: 1;
   }
 
-  /* Find Us — panel scrolls only if content truly overflows */
+  /* Find Us — panel scrolls so the map is fully reachable */
   .panel-find-us {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
 
-  /* height: 100% (from base) stays — needed for flex:1 on map to work */
+  /* height: auto overrides base height:100% so content can exceed viewport and scroll */
   .find-us-content {
+    height: auto;
     min-height: 100%;
   }
 
-  /* Map grows to fill whatever space the info section leaves */
+  /* Map gets a fixed height — no longer flex:1 since parent is height:auto */
   .find-us-map {
-    flex: 1;
-    min-height: 220px;
-    height: auto;
+    flex: none;
+    width: 100%;
+    height: 60vh;
+    min-height: 280px;
   }
 
   /* Background — center is better for close-up service photos */

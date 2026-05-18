@@ -704,9 +704,9 @@ a.find-us-address:hover {
 
   .find-us-map {
     width: 100%;
-    flex: 1;
-    min-height: 240px;
-    height: auto;
+    flex: none;
+    height: 60vh;
+    min-height: 280px;
   }
 
   .hours-row {
