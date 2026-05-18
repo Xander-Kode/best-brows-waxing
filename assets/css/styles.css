@@ -302,7 +302,7 @@ body {
   font-weight: 500;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--color-accent);
+  color: #C9A84C;
 
   /* Rule above the price — a hairline separator, not a side stripe */
   padding-top: 20px;
@@ -317,7 +317,7 @@ body {
   transform: translateX(-50%);
   width: 32px;
   height: 1px;
-  background-color: oklch(52% 0.22 295 / 0.5); /* accent at half opacity */
+  background-color: rgba(201, 168, 76, 0.5);
 }
 
 /* ============================================================
