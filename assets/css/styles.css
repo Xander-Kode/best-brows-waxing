@@ -272,7 +272,7 @@ body {
   top: 0;
   left: 0;
   opacity: 0;
-  color: var(--color-accent);
+  color: #C9A84C;
   -webkit-text-stroke: 1px #2e2e2e;
   paint-order: stroke fill;
 }
