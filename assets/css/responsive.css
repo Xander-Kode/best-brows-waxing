@@ -29,17 +29,64 @@
 
 
 /* ============================================================
-   MOBILE — Service panel background positioning
-   Shifts focus upward so subjects aren't cropped on portrait screens
+   MOBILE — 2-row nav, scrollable Find Us, image positioning
    ============================================================ */
 
 @media (max-width: 600px) {
-  .panel {
-    background-position: center 25%;
+  /* Taller nav to fit brand name row + buttons row */
+  :root {
+    --nav-height: 84px;
   }
 
-  .find-us-info {
-    background-position: center 25%;
+  .site-nav {
+    height: var(--nav-height);
+  }
+
+  /* Brand name — centred at top of nav */
+  .brand-name {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 38px;
+    justify-content: center;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    display: flex;
+  }
+
+  /* Buttons row pushed below brand name */
+  .nav-inner {
+    padding-left: 0;
+    padding-top: 38px;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+
+  .nav-item {
+    flex: 1;
+  }
+
+  /* Find Us — scrollable so map is always reachable */
+  .panel-find-us {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .find-us-content {
+    height: auto;
+    min-height: 100%;
+  }
+
+  /* Fixed map height now that the container is scrollable */
+  .find-us-map {
+    height: 320px;
+    flex: none;
+  }
+
+  /* Background — center is better for close-up service photos */
+  .panel {
+    background-position: center center;
   }
 }
 
@@ -50,18 +97,13 @@
 
 @media (max-width: 375px) {
   .brand-name {
-    display: none; /* not enough room alongside 5 nav buttons */
-  }
-
-  .nav-inner {
-    padding-left: 0;
-    justify-content: space-evenly;
+    font-size: 0.75rem;
   }
 
   .nav-item {
-    padding: 0 8px;
-    font-size: 0.625rem; /* 10px */
-    letter-spacing: 0.04em;
+    padding: 0 6px;
+    font-size: 0.6rem;
+    letter-spacing: 0.03em;
   }
 
   .panel-content h1 {
@@ -93,19 +135,14 @@
 
 @media (min-width: 376px) and (max-width: 412px) {
   .brand-name {
-    font-size: 0.65rem;
-    letter-spacing: 0.03em;
-    gap: 0.2em;
-  }
-
-  .nav-inner {
-    padding-left: 0.5rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
   }
 
   .nav-item {
-    padding: 0 11px;
-    font-size: 0.75rem;
-    letter-spacing: 0.08em;
+    padding: 0 10px;
+    font-size: 0.72rem;
+    letter-spacing: 0.07em;
   }
 
   .panel-content h1 {
@@ -165,13 +202,7 @@
 
 @media (min-width: 413px) and (max-width: 430px) {
   .brand-name {
-    font-size: 0.7rem;
-    letter-spacing: 0.04em;
-    gap: 0.25em;
-  }
-
-  .nav-inner {
-    padding-left: 0.75rem;
+    font-size: 0.88rem;
   }
 
   .nav-item {
