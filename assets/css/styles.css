@@ -457,6 +457,12 @@ body {
 
 /* ---- Individual item labels ---- */
 
+.service-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
 .service-name {
   font-family: var(--font-ui);
   font-size: 0.9375rem;   /* 15px */
@@ -467,6 +473,15 @@ body {
 .service-name em {
   color: #C9A84C;
   font-style: italic;
+}
+
+.service-translation {
+  display: block;
+  color: #C9A84C;
+  font-style: italic;
+  font-size: 0.8125rem;
+  font-family: var(--font-ui);
+  font-weight: 300;
 }
 
 .service-duration {
