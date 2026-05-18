@@ -1,0 +1,242 @@
+/* ============================================================
+   Best Brows & Waxing — responsive.css
+   Device-specific breakpoints: iPhone, Samsung, Tablet
+   Complements styles.css (which covers ≤600px, ≤480px, ≤380px)
+   ============================================================ */
+
+
+/* ============================================================
+   SAFE AREA INSETS
+   Notched / Dynamic Island iPhones (X, 11, 12, 13, 14, 15 series)
+   Samsung Galaxy with punch-hole cameras
+   ============================================================ */
+
+@supports (padding: env(safe-area-inset-top)) {
+  .site-nav {
+    padding-top: env(safe-area-inset-top);
+    height: calc(var(--nav-height) + env(safe-area-inset-top));
+  }
+
+  .panels-container {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .find-us-info {
+    padding-left: max(6vw, env(safe-area-inset-left));
+    padding-right: max(6vw, env(safe-area-inset-right));
+  }
+}
+
+
+/* ============================================================
+   SMALL PHONES — iPhone SE (375px), Samsung Galaxy S8/S9 (360px)
+   ============================================================ */
+
+@media (max-width: 375px) {
+  .brand-name {
+    display: none; /* not enough room alongside 5 nav buttons */
+  }
+
+  .nav-inner {
+    padding-left: 0;
+    justify-content: space-evenly;
+  }
+
+  .nav-item {
+    padding: 0 8px;
+    font-size: 0.625rem; /* 10px */
+    letter-spacing: 0.04em;
+  }
+
+  .panel-content h1 {
+    font-size: clamp(3rem, 18vw, 4.5rem);
+  }
+
+  .panel-content p {
+    font-size: 0.875rem;
+    margin-top: 16px;
+  }
+
+  .price {
+    margin-top: 24px;
+  }
+
+  .reveal-content {
+    padding: calc(var(--nav-height) + 24px) 20px 24px;
+  }
+
+  .find-us-heading {
+    font-size: clamp(2rem, 14vw, 3rem);
+  }
+}
+
+
+/* ============================================================
+   MID PHONES — iPhone 12/13/14 (390px), Samsung Galaxy S22 (360–412px)
+   ============================================================ */
+
+@media (min-width: 376px) and (max-width: 430px) {
+  .brand-name {
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    gap: 0.25em;
+  }
+
+  .nav-inner {
+    padding-left: 0.75rem;
+  }
+
+  .nav-item {
+    padding: 0 14px;
+  }
+}
+
+
+/* ============================================================
+   LARGE PHONES — iPhone Pro Max (430px+), Samsung Galaxy Ultra (412px)
+   ============================================================ */
+
+@media (min-width: 431px) and (max-width: 600px) {
+  .brand-name {
+    font-size: 0.8rem;
+  }
+
+  .nav-item {
+    padding: 0 16px;
+  }
+
+  .panel-content h1 {
+    font-size: clamp(3.5rem, 14vw, 5.5rem);
+  }
+}
+
+
+/* ============================================================
+   TABLETS PORTRAIT — iPad (768px), Samsung Galaxy Tab (800px)
+   ============================================================ */
+
+@media (min-width: 601px) and (max-width: 1024px) and (orientation: portrait) {
+  :root {
+    --nav-height: 68px;
+  }
+
+  .nav-item {
+    padding: 0 24px;
+    font-size: 0.8125rem;
+  }
+
+  .panel-content h1 {
+    font-size: clamp(5rem, 12vw, 7rem);
+  }
+
+  .panel-content p {
+    font-size: 1rem;
+    max-width: 38ch;
+  }
+
+  /* Bigger drag handle for touch */
+  .drag-handle {
+    width: 56px;
+  }
+
+  .handle-grip {
+    width: 44px;
+    height: 44px;
+    font-size: 1.1rem;
+  }
+
+  .reveal-content {
+    padding: calc(var(--nav-height) + 56px) 56px 56px;
+  }
+
+  .service-list li {
+    padding: 0.9rem 0;
+  }
+
+  .service-name,
+  .service-price {
+    font-size: 1.0625rem;
+  }
+
+  /* Find Us: stack vertically in portrait like mobile */
+  .find-us-content {
+    flex-direction: column;
+  }
+
+  .find-us-info {
+    width: 100%;
+    padding: calc(var(--nav-height) + 32px) 8vw 32px;
+    gap: 2rem;
+  }
+
+  .find-us-map {
+    width: 100%;
+    height: 340px;
+  }
+
+  .find-us-heading {
+    font-size: clamp(3rem, 8vw, 5rem);
+  }
+}
+
+
+/* ============================================================
+   TABLETS LANDSCAPE — iPad (1024px), Samsung Galaxy Tab wide
+   Targets touch devices to avoid overriding desktop
+   ============================================================ */
+
+@media (min-width: 768px) and (max-width: 1366px) and (orientation: landscape) and (hover: none) {
+  :root {
+    --nav-height: 60px;
+  }
+
+  /* Bigger drag handle for touch */
+  .drag-handle {
+    width: 56px;
+  }
+
+  .handle-grip {
+    width: 44px;
+    height: 44px;
+    font-size: 1.1rem;
+  }
+
+  .reveal-content {
+    padding: calc(var(--nav-height) + 48px) 72px 48px;
+  }
+
+  .service-list li {
+    padding: 0.85rem 0;
+  }
+
+  .find-us-info {
+    padding: 56px 6vw;
+  }
+}
+
+
+/* ============================================================
+   TOUCH DEVICES — General (any screen, touch primary)
+   Improves tap targets and removes hover-only styling
+   ============================================================ */
+
+@media (hover: none) and (pointer: coarse) {
+  /* Ensure nav buttons have a generous tap target */
+  .nav-item {
+    min-height: 44px;
+  }
+
+  /* Disable hover color transition — no hover on touch */
+  .nav-item:hover {
+    color: var(--color-text-secondary);
+  }
+
+  .nav-item.active:hover {
+    color: var(--color-text-primary);
+  }
+
+  a.find-us-value:hover,
+  a.find-us-address:hover {
+    color: var(--color-text-primary);
+  }
+}
