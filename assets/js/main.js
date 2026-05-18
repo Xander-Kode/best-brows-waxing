@@ -9,33 +9,42 @@
 
   // ── Heading language fade ─────────────────────────────────────────────────────
 
-  function fadeToSpanish(panel, duration = 0.4) {
+  function fadeToSpanish(panel, duration = 1.1) {
     const en = panel.querySelector('.panel-content h1 .en');
     const es = panel.querySelector('.panel-content h1 .es');
     if (!en || !es) return;
     gsap.killTweensOf([en, es]);
-    gsap.to(en, { opacity: 0, duration, ease: 'power2.out' });
-    gsap.to(es, { opacity: 1, duration, ease: 'power2.out' });
+    gsap.to(en, { opacity: 0, y: -10, duration, ease: 'sine.inOut' });
+    gsap.to(es, { opacity: 1, y: 0,   duration, ease: 'sine.inOut' });
   }
 
-  function fadeToEnglish(panel, duration = 0.4) {
+  function fadeToEnglish(panel, duration = 1.1) {
     const en = panel.querySelector('.panel-content h1 .en');
     const es = panel.querySelector('.panel-content h1 .es');
     if (!en || !es) return;
     gsap.killTweensOf([en, es]);
-    gsap.to(en, { opacity: 1, duration, ease: 'power2.out' });
-    gsap.to(es, { opacity: 0, duration, ease: 'power2.out' });
+    gsap.to(en, { opacity: 1, y: 0,  duration, ease: 'sine.inOut' });
+    gsap.to(es, { opacity: 0, y: 10, duration, ease: 'sine.inOut' });
   }
 
-  // Hover: only animate the active panel to avoid off-screen panels interfering
-  panels.forEach((panel) => {
-    panel.addEventListener('mouseenter', () => {
-      if (panel.classList.contains('active') && !isAnimating) fadeToSpanish(panel);
-    });
-    panel.addEventListener('mouseleave', () => {
-      if (panel.classList.contains('active')) fadeToEnglish(panel);
-    });
-  });
+  // ── Auto-cycle language every 5 seconds ──────────────────────────────────────
+
+  let langCycleTimer = null;
+  let isSpanish = false;
+
+  function startLangCycle(panel) {
+    stopLangCycle();
+    isSpanish = false;
+    langCycleTimer = setInterval(() => {
+      isSpanish = !isSpanish;
+      isSpanish ? fadeToSpanish(panel) : fadeToEnglish(panel);
+    }, 5000);
+  }
+
+  function stopLangCycle() {
+    clearInterval(langCycleTimer);
+    langCycleTimer = null;
+  }
 
   // ── Nav indicator ────────────────────────────────────────────────────────────
 
@@ -72,6 +81,8 @@
     if (targetIndex === currentIndex || isAnimating) return;
     isAnimating = true;
 
+    stopLangCycle();
+
     const direction = targetIndex > currentIndex ? 1 : -1;
     const outgoing = panels[currentIndex];
     const incoming = panels[targetIndex];
@@ -94,6 +105,7 @@
         currentIndex = targetIndex;
         isAnimating = false;
         fadeToEnglish(incoming, 0.5);
+        startLangCycle(incoming);
       }
     });
 
@@ -213,4 +225,5 @@
   });
 
   positionIndicator(navItems[0], false);
+  startLangCycle(panels[0]);
 })();
