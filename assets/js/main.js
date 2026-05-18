@@ -87,6 +87,11 @@
     const outgoing = panels[currentIndex];
     const incoming = panels[targetIndex];
 
+    // Kill any in-progress heading tweens on the outgoing panel
+    const outEn = outgoing.querySelector('.panel-content h1 .en');
+    const outEs = outgoing.querySelector('.panel-content h1 .es');
+    if (outEn && outEs) gsap.killTweensOf([outEn, outEs]);
+
     resetReveal(outgoing);
 
     gsap.set(incoming, { x: direction * 100 + '%', autoAlpha: 1 });
@@ -105,7 +110,7 @@
         currentIndex = targetIndex;
         isAnimating = false;
         fadeToEnglish(incoming, 0.5);
-        startLangCycle(incoming);
+        if (incoming.querySelector('.panel-content h1 .en')) startLangCycle(incoming);
       }
     });
 
@@ -223,6 +228,9 @@
     if (i !== 0) gsap.set(panel, { x: '100%' });
     initReveal(panel);
   });
+
+  // Set initial y on all .es elements so first cycle has the same drift as later ones
+  document.querySelectorAll('.panel-content h1 .es').forEach(el => gsap.set(el, { y: 10 }));
 
   positionIndicator(navItems[0], false);
   startLangCycle(panels[0]);
