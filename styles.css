@@ -1,0 +1,675 @@
+/* ============================================================
+   Best Brows & Waxing — styles.css
+   Register: Brand (marketing, single-page editorial)
+   Theme: Drenched — the purple overlay IS the design
+   Typography: Cormorant Garamond (display) + DM Sans (UI)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+
+:root {
+  /* Color */
+  --color-nav-bg:        oklch(12% 0.008 285);   /* #111111 with purple hint */
+  --color-panel-base:    oklch(15% 0.006 285);   /* #1a1a1a with purple hint */
+  --color-overlay:       rgba(88, 28, 135, 0.45);
+  --color-accent:        oklch(52% 0.22 295);    /* #9333ea */
+  --color-accent-dim:    oklch(42% 0.18 295);    /* darker purple for active pressed */
+  --color-text-primary:  oklch(98% 0.004 285);   /* near-white, not pure #fff */
+  --color-text-secondary:oklch(84% 0.006 285);   /* #d1d5db equivalent, slight purple tint */
+  --color-indicator:     oklch(52% 0.22 295);    /* same as accent */
+
+  /* Typography */
+  --font-display:  'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-ui:       'DM Sans', 'Helvetica Neue', system-ui, sans-serif;
+
+  /* Spacing */
+  --nav-height: 64px;
+
+  /* Easing (for CSS transitions only — GSAP handles panel transitions) */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* no scroll — panel-switching UI only */
+  background-color: var(--color-panel-base);
+}
+
+body {
+  font-family: var(--font-ui);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+
+.site-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--nav-height);
+  z-index: 100;
+  background-color: #2e2e2e;
+
+  /* Subtle bottom edge — not a side stripe, just a separator whisper */
+  border-bottom: 1px solid oklch(20% 0.012 285);
+}
+
+.nav-inner {
+  position: relative;          /* stacking context for .nav-indicator */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 0;                      /* buttons handle their own spacing */
+}
+
+/* ---- Nav Buttons ---- */
+
+.nav-item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  /* Spacing: generous horizontal, full vertical fill */
+  padding: 0 32px;
+
+  /* Typography */
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;        /* 13px */
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+
+  /* Reset button defaults */
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+  /* Smooth color shift */
+  transition:
+    color 0.28s var(--ease-out-quart);
+}
+
+.nav-item:hover {
+  color: var(--color-text-primary);
+}
+
+.nav-item.active {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+/* Focus-visible ring — keyboard accessibility */
+.nav-item:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -4px;
+  border-radius: 2px;
+}
+
+/* ---- Sliding Indicator Bar ---- */
+/* GSAP sets left, width, and drives the transition.
+   We only define the base appearance. */
+
+.nav-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;              /* GSAP will set this */
+  width: 80px;          /* GSAP will set this to match active button */
+  height: 2px;
+  background-color: var(--color-indicator);
+  border-radius: 1px 1px 0 0;
+  /* No CSS transition here — GSAP owns the animation */
+  will-change: transform, width;
+}
+
+/* ============================================================
+   PANELS CONTAINER — Hard requirements, exactly
+   ============================================================ */
+
+.panels-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ============================================================
+   INDIVIDUAL PANELS — Hard requirements, exactly
+   ============================================================ */
+
+.panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: var(--color-panel-base); /* fallback while photo loads */
+
+  /* Off-screen by default — GSAP drives transitions */
+  transform: translateX(100%);
+
+  /* No CSS transition for transform — GSAP owns it */
+  will-change: transform;
+}
+
+.panel.active {
+  transform: translateX(0);
+}
+
+/* ============================================================
+   PANEL OVERLAY — Purple drama layer
+   ============================================================ */
+
+.panel-overlay {
+  position: absolute;
+  inset: 0;
+
+  /* Dark gradient to keep text legible without colour tint */
+  background-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.15) 0%,
+    rgba(0, 0, 0, 0.45) 60%,
+    rgba(0, 0, 0, 0.65) 100%
+  );
+  pointer-events: none;
+}
+
+/* ============================================================
+   PANEL CONTENT — Centered editorial block
+   ============================================================ */
+
+.panel-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  /* Clear fixed nav at top; push content slightly above true center for visual balance */
+  padding-top: var(--nav-height);
+  padding-bottom: 6vh;
+
+  /* Prevent text from touching viewport edges */
+  padding-left: 40px;
+  padding-right: 40px;
+
+  text-align: center;
+}
+
+/* ---- Service Name (H1) ---- */
+
+.panel-content h1 {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 10vw, 8rem);  /* 64px–128px, fluid */
+  font-weight: 300;                     /* Cormorant shines in light weight */
+  font-style: italic;                   /* editorial serif italic = luxe */
+  line-height: 1.0;
+  letter-spacing: -0.01em;             /* slight compression at display scale */
+  color: var(--color-text-primary);
+  max-width: 14ch;
+  position: relative;
+}
+
+.panel-content h1 .en,
+.panel-content h1 .es {
+  display: block;
+}
+
+.panel-content h1 .es {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  color: var(--color-accent);
+  -webkit-text-stroke: 1px #2e2e2e;
+  paint-order: stroke fill;
+}
+
+/* ---- Description ---- */
+
+.panel-content p {
+  margin-top: 28px;
+  font-family: var(--font-ui);
+  font-size: clamp(0.9375rem, 1.5vw, 1.0625rem); /* 15px–17px */
+  font-weight: 300;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  max-width: 46ch; /* cap line length for readability */
+  letter-spacing: 0.01em;
+}
+
+/* ---- Price ---- */
+
+.price {
+  display: block;
+  margin-top: 40px;
+
+  /* Editorial treatment: tracked uppercase, small, accent color */
+  font-family: var(--font-ui);
+  font-size: 0.6875rem;   /* 11px — intentionally small, refined */
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+
+  /* Rule above the price — a hairline separator, not a side stripe */
+  padding-top: 20px;
+  position: relative;
+}
+
+.price::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 1px;
+  background-color: oklch(52% 0.22 295 / 0.5); /* accent at half opacity */
+}
+
+/* ============================================================
+   REDUCED MOTION — Respect user preference
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-item {
+    transition: none;
+  }
+  /* Note: GSAP should also check this preference in main.js.
+     The CSS layer handles only CSS-driven transitions. */
+}
+
+/* ============================================================
+   RESPONSIVE — Mobile adjustments
+   ============================================================ */
+
+@media (max-width: 600px) {
+  :root {
+    --nav-height: 56px;
+  }
+
+  .nav-item {
+    padding: 0 18px;
+    font-size: 0.6875rem; /* 11px */
+    letter-spacing: 0.1em;
+  }
+
+  .panel-content {
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 8vh;
+  }
+
+  .panel-content p {
+    margin-top: 20px;
+  }
+
+  .price {
+    margin-top: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-item {
+    font-size: 0.75rem;
+    padding: 0 0.5rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .nav-item {
+    padding: 0 12px;
+    letter-spacing: 0.06em;
+  }
+}
+
+/* ============================================================
+   TALL VIEWPORT ADJUSTMENT — Prevent content from feeling lost
+   ============================================================ */
+
+@media (min-height: 900px) {
+  .panel-content {
+    padding-bottom: 10vh;
+  }
+}
+
+/* ============================================================
+   CURTAIN-WIPE REVEAL — Drag interaction overlay
+   ============================================================ */
+
+/* ---- Glass reveal panel (GSAP sets width dynamically) ---- */
+
+.reveal-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;                        /* GSAP owns this — no CSS transition */
+  overflow: hidden;
+  z-index: 10;
+
+  /* Deep purple glass — lets the hero photo show through */
+  background: rgba(15, 5, 35, 0.52);
+  backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+}
+
+/* ---- Reveal content — fixed width so it never stretches/squishes ---- */
+
+.reveal-content {
+  width: 100vw;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  /* Top padding clears the fixed nav; sides breathe generously */
+  padding: calc(var(--nav-height) + 48px) 64px 48px;
+}
+
+/* ---- Heading inside reveal ---- */
+
+.reveal-content h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 5vw, 3.5rem);   /* smaller than hero h1 */
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  color: var(--color-text-primary);
+  margin-bottom: 32px;
+}
+
+/* ---- Service price list ---- */
+
+.service-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.service-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid oklch(52% 0.22 295 / 0.18); /* faint accent rule */
+}
+
+.service-list li:last-child {
+  border-bottom: none;
+}
+
+/* ---- Individual item labels ---- */
+
+.service-name {
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;   /* 15px */
+  font-weight: 300;
+  color: var(--color-text-secondary);
+}
+
+.service-name em {
+  color: var(--color-accent);
+  font-style: italic;
+}
+
+.service-duration {
+  font-size: 0.75rem;
+  color: oklch(60% 0.01 285);
+  font-style: normal;
+  letter-spacing: 0.03em;
+}
+
+.service-price {
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;   /* 15px — matches .service-name */
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+/* ============================================================
+   DRAG HANDLE
+   ============================================================ */
+
+.drag-handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 44px;            /* touch-friendly minimum */
+  height: 100%;
+  z-index: 20;            /* above .reveal-panel */
+  cursor: grab;
+  transform: translateX(-50%);  /* center the handle on the reveal edge */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+/* ---- Purple hairline running the full height ---- */
+
+.handle-line {
+  position: absolute;
+  height: 100%;
+  width: 2px;
+  background: var(--color-accent);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ---- Circular grip button centered on the line ---- */
+
+.handle-grip {
+  position: relative;
+  z-index: 1;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================================
+   RESPONSIVE — Curtain-wipe adjustments at 600px
+   ============================================================ */
+
+@media (max-width: 600px) {
+  .reveal-content {
+    padding: calc(var(--nav-height) + 28px) 28px 28px;
+  }
+
+  .service-list li {
+    padding: 0.55rem 0;
+  }
+
+  .handle-grip {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* ============================================================
+   FIND US PANEL
+   ============================================================ */
+
+.panel-find-us {
+  background-color: #1a1a1a;
+}
+
+.find-us-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  padding-top: var(--nav-height);
+}
+
+.find-us-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 50%;
+  padding: 64px 6vw;
+  gap: 2.5rem;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.find-us-info::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.15) 0%,
+    rgba(0, 0, 0, 0.45) 60%,
+    rgba(0, 0, 0, 0.65) 100%
+  );
+  pointer-events: none;
+}
+
+.find-us-info > * {
+  position: relative;
+  z-index: 1;
+}
+
+.find-us-map {
+  width: 50%;
+  height: 100%;
+}
+
+.find-us-map iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+.find-us-heading {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--color-text-primary);
+  line-height: 1;
+  margin: 0 0 1rem;
+}
+
+.find-us-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.find-us-label {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  font-weight: 500;
+}
+
+.find-us-value {
+  font-family: var(--font-ui);
+  font-size: clamp(1rem, 2.5vw, 1.35rem);
+  color: var(--color-text-primary);
+  font-weight: 300;
+  line-height: 1.6;
+  text-decoration: none;
+}
+
+a.find-us-value:hover,
+a.find-us-address:hover {
+  color: var(--color-accent);
+  transition: color 0.25s ease;
+}
+
+.hours-row {
+  display: flex;
+  gap: 2rem;
+  font-family: var(--font-ui);
+  font-size: clamp(0.95rem, 2vw, 1.2rem);
+  color: var(--color-text-primary);
+  font-weight: 300;
+}
+
+.hours-row span:first-child {
+  min-width: 180px;
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 600px) {
+  .find-us-content {
+    flex-direction: column;
+  }
+
+  .find-us-info {
+    width: 100%;
+    padding: calc(var(--nav-height) + 24px) 6vw 24px;
+    gap: 1.5rem;
+  }
+
+  .find-us-map {
+    width: 100%;
+    height: 280px;
+  }
+
+  .hours-row {
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .hours-row span:first-child {
+    min-width: unset;
+  }
+}
