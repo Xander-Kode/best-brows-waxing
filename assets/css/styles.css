@@ -509,13 +509,18 @@ body {
   cursor: grabbing;
 }
 
-/* ---- Purple hairline running the full height ---- */
+.panel:not(.active) .drag-handle {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ---- Gold hairline running the full height ---- */
 
 .handle-line {
   position: absolute;
   height: 100%;
   width: 2px;
-  background: var(--color-accent);
+  background: #C9A84C;
   left: 50%;
   transform: translateX(-50%);
 }
@@ -528,8 +533,8 @@ body {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: var(--color-accent);
-  color: var(--color-text-primary);
+  background: #C9A84C;
+  color: #1a1a1a;
   display: flex;
   align-items: center;
   justify-content: center;
