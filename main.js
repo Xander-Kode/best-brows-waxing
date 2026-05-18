@@ -190,6 +190,21 @@
     });
   });
 
+  // ── Brand name entrance animation ────────────────────────────────────────────
+
+  const brandWords = document.querySelectorAll('.brand-word');
+  gsap.fromTo(brandWords,
+    { opacity: 0, y: -12 },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      ease: 'power2.out',
+      stagger: 0.12,
+      delay: 0.3
+    }
+  );
+
   // ── Initialize ────────────────────────────────────────────────────────────────
 
   panels.forEach((panel, i) => {

@@ -64,6 +64,27 @@ body {
    NAVIGATION
    ============================================================ */
 
+.brand-name {
+  position: absolute;
+  left: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  font-family: var(--font-display);
+  font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: 0.06em;
+  color: #C9A84C;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.brand-word {
+  display: inline-block;
+  opacity: 0;
+}
+
 .site-nav {
   position: fixed;
   top: 0;
@@ -83,7 +104,8 @@ body {
   align-items: center;
   justify-content: center;
   height: 100%;
-  gap: 0;                      /* buttons handle their own spacing */
+  gap: 0;
+  padding-left: 1.5rem;
 }
 
 /* ---- Nav Buttons ---- */
