@@ -169,7 +169,8 @@
         }
       },
       onClick: function () {
-        const half = window.innerWidth * 0.5;
+        const isMobile = window.innerWidth <= 600;
+        const target = isMobile ? window.innerWidth : window.innerWidth * 0.5;
         const isOpen = this.x >= window.innerWidth * 0.08;
         const d = Draggable.get(dragHandle);
 
@@ -182,16 +183,16 @@
           gsap.to(revealPanel, { width: 0, duration: 0.45, ease: 'power2.inOut' });
           if (prices.length) gsap.to(prices, { x: 0, duration: 0.45, ease: 'power2.inOut' });
         } else {
-          // Closed — click snaps to half the page
+          // Closed — click opens full width on mobile, half on desktop
           const threshold = window.innerWidth * thresholdRatio;
-          const priceX = half <= threshold
+          const priceX = target <= threshold
             ? -(window.innerWidth - threshold)
-            : half - window.innerWidth;
+            : target - window.innerWidth;
           gsap.to(dragHandle, {
-            x: half, duration: 0.45, ease: 'power2.inOut',
+            x: target, duration: 0.45, ease: 'power2.inOut',
             onComplete: () => { if (d) d.update(); }
           });
-          gsap.to(revealPanel, { width: half, duration: 0.45, ease: 'power2.inOut' });
+          gsap.to(revealPanel, { width: target, duration: 0.45, ease: 'power2.inOut' });
           if (prices.length) gsap.to(prices, { x: priceX, duration: 0.45, ease: 'power2.inOut' });
         }
       }
