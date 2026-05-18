@@ -88,10 +88,82 @@
 
 
 /* ============================================================
-   MID PHONES — iPhone 12/13/14 (390px), Samsung Galaxy S22 (360–412px)
+   MID PHONES — Samsung Galaxy S23 (390px), S22, iPhone 12/13/14
    ============================================================ */
 
-@media (min-width: 376px) and (max-width: 430px) {
+@media (min-width: 376px) and (max-width: 412px) {
+  .brand-name {
+    font-size: 0.65rem;
+    letter-spacing: 0.03em;
+    gap: 0.2em;
+  }
+
+  .nav-inner {
+    padding-left: 0.5rem;
+  }
+
+  .nav-item {
+    padding: 0 11px;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+  }
+
+  .panel-content h1 {
+    font-size: clamp(3.25rem, 16vw, 5rem);
+  }
+
+  .panel-content p {
+    font-size: 0.9rem;
+    margin-top: 18px;
+    max-width: 34ch;
+  }
+
+  .price {
+    margin-top: 28px;
+  }
+
+  .reveal-content {
+    padding: calc(var(--nav-height) + 32px) 24px 32px;
+  }
+
+  .service-name,
+  .service-price {
+    font-size: 0.875rem;
+  }
+
+  .service-list li {
+    padding: 0.65rem 0;
+  }
+
+  /* Bigger touch target for drag handle */
+  .drag-handle {
+    width: 52px;
+  }
+
+  .handle-grip {
+    width: 40px;
+    height: 40px;
+  }
+
+  .find-us-heading {
+    font-size: clamp(2.5rem, 12vw, 3.5rem);
+  }
+
+  .find-us-value {
+    font-size: 1rem;
+  }
+
+  .hours-row {
+    font-size: 0.9rem;
+  }
+}
+
+
+/* ============================================================
+   MID-LARGE PHONES — Galaxy S23+ (393px), iPhone 14 Plus (428px)
+   ============================================================ */
+
+@media (min-width: 413px) and (max-width: 430px) {
   .brand-name {
     font-size: 0.7rem;
     letter-spacing: 0.04em;
@@ -103,7 +175,11 @@
   }
 
   .nav-item {
-    padding: 0 14px;
+    padding: 0 13px;
+  }
+
+  .reveal-content {
+    padding: calc(var(--nav-height) + 36px) 28px 36px;
   }
 }
 
